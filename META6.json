@@ -1,0 +1,28 @@
+{
+  "auth": "zef:lizmat",
+  "authors": [
+    "Elizabeth Mattijsen"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+    "Code::Coverable:ver<0.0.2+>:auth<zef:lizmat>",
+    "String::Utils:ver<0.0.32+>:auth<zef:lizmat>"
+  ],
+  "description": "produce code coverage reports",
+  "license": "Artistic-2.0",
+  "name": "Code::Coverage",
+  "perl": "6.d",
+  "provides": {
+    "Code::Coverage": "lib/Code/Coverage.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "",
+  "tags": [
+    "COVERAGE"
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}

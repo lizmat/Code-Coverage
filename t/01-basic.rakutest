@@ -1,0 +1,31 @@
+use Test;
+
+use Code::Coverage;
+
+plan 8;
+
+my $tester := $*PROGRAM.sibling("cover.raku").absolute;
+
+my $coverage := Code::Coverage.new(
+  targets => $tester,
+  runners => $tester,
+);
+is $coverage.coverables{$tester}, "5 7 8 9 11 12", "are the coverables ok";
+
+$coverage.run();
+is $coverage.out, "alas\n", "out on first run ok";
+is $coverage.err, "",       "err on first run ok";
+is $coverage.covered{$tester},
+  "1 5 7 9 12",
+  "is the first coverage ok";
+
+$coverage.run(42);
+is $coverage.out, "84\n", "out on first run ok";
+is $coverage.err, "",     "err on first run ok";
+is $coverage.covered{$tester},
+  "1 5 7 8 9 12",
+  "is the second coverage ok";
+
+is $coverage.missed{$tester}, "11", "is missed ok";
+
+# vim: expandtab shiftwidth=4
