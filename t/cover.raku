@@ -12,4 +12,25 @@ else {
     say "alas";
 }
 
+class Foo {
+    has $.a;
+    has @.b;
+    has %.c;
+
+    method TWEAK() {
+        $!a = "foo";
+        @!b = "bar";
+        %!c = :baz;
+    }
+}
+
+my $foo = Foo.new(:$a);
+
+if $foo.a eq "foo" {
+    $foo.b.push("zippo");
+}
+else {
+    $foo.c = ();
+}
+
 # vim: expandtab shiftwidth=4

@@ -1,6 +1,6 @@
-use v6.*;
+use v6.*;  # because of nano
 
-use Code::Coverable:ver<0.0.2+>:auth<zef:lizmat>;
+use Code::Coverable:ver<0.0.3+>:auth<zef:lizmat>;
 use String::Utils:ver<0.0.32+>:auth<zef:lizmat> <root>;
 
 class Code::Coverage {
@@ -62,11 +62,20 @@ class Code::Coverage {
     method err(Code::Coverage:D:) { @!err.join }
 
     method missed(Code::Coverage:D:) {
-        my %missed is Map = %!coverables.map: {
+        %!coverables.map({
             my $key := .key;
-            $key => (.value (-) %!covered{$key}).keys.List
-        }
-        %missed
+            $key => (.value (-) (%!covered{$key} // ())).keys.sort.List
+        }).Map
+    }
+
+    method coverage() {
+        my %missed := self.missed;
+        %!coverables.map({
+            my $key := .key;
+            if %missed{$key} -> $missed {
+                $key => sprintf '%.2f%%', 100 - 100 * $missed.elems / .value
+            }
+        }).Map
     }
 }
 
@@ -197,9 +206,16 @@ that appear to have B<NOT> been covered by executing the runners
 
 Elizabeth Mattijsen <liz@raku.rocks>
 
+Source can be located at: https://github.com/lizmat/Code-Coverage . Comments and
+Pull Requests are welcome.
+
+If you like this module, or what I'm doing more generally, committing to a
+L<small sponsorship|https://github.com/sponsors/lizmat/>  would mean a great
+deal to me!
+
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2024 Elizabeth Mattijsen
+Copyright 2024, 2025 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

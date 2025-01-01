@@ -6,7 +6,7 @@
   "build-depends": [
   ],
   "depends": [
-    "Code::Coverable:ver<0.0.2+>:auth<zef:lizmat>",
+    "Code::Coverable:ver<0.0.3+>:auth<zef:lizmat>",
     "String::Utils:ver<0.0.32+>:auth<zef:lizmat>"
   ],
   "description": "produce code coverage reports",
@@ -24,5 +24,5 @@
   ],
   "test-depends": [
   ],
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

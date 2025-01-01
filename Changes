@@ -1,6 +1,9 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
+    - Up dependency on Code::Coverable to get fixes
+    - Update copyright year
+    - Add sponsor link
 
 0.0.1  2024-12-26T21:07:13+01:00
     - Initial version
