@@ -33,7 +33,7 @@ new
 ---
 
 ```raku
-my $coverage := Code::Coverage.new(
+my $cc := Code::Coverage.new(
   targets => @modules,
   runners => @test-scripts,
   extra   => "-I.",    # default: none
@@ -41,6 +41,9 @@ my $coverage := Code::Coverage.new(
   slug    => "foobar", # default: "code-coverage-"
   keep    => True,     # default: False
 );
+
+$cc.run;
+say "$cc.coverage() of code was covered";
 ```
 
 The `new` method accepts the following named arguments:
@@ -100,6 +103,11 @@ missing
 -------
 
 Returns a `Map`, keyed by target key, with all of the lines that appear to have **NOT** been covered by executing the runners (possibly multiple times).
+
+coverage
+--------
+
+Returns a string with the percentage of lines that were covered so far by executing the runners (possibly multiple times).
 
 AUTHOR
 ======

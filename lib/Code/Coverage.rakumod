@@ -114,7 +114,7 @@ more programs and produce code coverage of one or more targets
 
 =begin code :lang<raku>
 
-my $coverage := Code::Coverage.new(
+my $cc := Code::Coverage.new(
   targets => @modules,
   runners => @test-scripts,
   extra   => "-I.",    # default: none
@@ -122,6 +122,9 @@ my $coverage := Code::Coverage.new(
   slug    => "foobar", # default: "code-coverage-"
   keep    => True,     # default: False
 );
+
+$cc.run;
+say "$cc.coverage() of code was covered";
 
 =end code
 
@@ -202,6 +205,11 @@ Returns a C<Map>, keyed by target key, with all of the lines
 that appear to have B<NOT> been covered by executing the runners
 (possibly multiple times).
 
+=head2 coverage
+
+Returns a string with the percentage of lines that were covered
+so far by executing the runners (possibly multiple times).
+
 =head1 AUTHOR
 
 Elizabeth Mattijsen <liz@raku.rocks>
@@ -220,3 +228,5 @@ Copyright 2024, 2025 Elizabeth Mattijsen
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
 =end pod
+
+# vim: expandtab shiftwidth=4
