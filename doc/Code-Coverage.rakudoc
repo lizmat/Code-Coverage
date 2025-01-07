@@ -1,0 +1,283 @@
+=begin pod
+
+=head1 NAME
+
+Code::Coverage - produce code coverage reports
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+
+use Code::Coverage;
+
+my $coverage := Code::Coverage.new(
+  targets => @modules,
+  runners => @test-scripts
+);
+
+$coverage.run;
+
+say .key ~ ": " ~ .value for $coverage.missed;
+
+=end code
+
+=head1 DESCRIPTION
+
+Code::Coverage is a class that contains the logic to run one or
+more Raku programs and produce code coverage of one or more targets
+(usually modules).
+
+=head1 METHODS
+
+=head2 new
+
+=begin code :lang<raku>
+
+my $cc := Code::Coverage.new(
+  targets => @modules,
+  runners => @test-scripts,
+  extra   => "-I.",    # default: none
+  tmpdir  => ".",      # default: %*ENV<TMPDIR> // $*HOME
+  slug    => "foobar", # default: "code-coverage-"
+  keep    => True,     # default: False
+);
+
+$cc.run;
+say "$cc.coverage() of code was covered";
+
+=end code
+
+The C<new> method accepts the following named arguments:
+
+=head3 :targets
+
+The C<targets> named argument indicates one or more targets for which
+coverage information should be created.  Each of these can be specified
+as a path (either as string, or as an C<IO::Path> object), or as a
+C<use> target (identity) such as "C<String::Utils>".
+
+Whatever was specified, will be returned by the C<targets> method.
+
+=head3 :runners
+
+The C<runners> named argument indicates the paths of one or
+more scripts that should be executed to determine coverage
+information.  It should specify at least one script.
+
+Whatever was specified, will be returned by the C<runners> method.
+
+=head3 :extra
+
+The C<extra> named argument indicates any extra command line
+arguments that should be set when calling the C<:runners> scripts.
+By default, no extra arguments are added.  A typical usage
+would be "-I." to ensure that the current source of a module
+is used.
+
+Whatever was specified, will be returned by the C<extra> method.
+
+=head3 :tmpdir
+
+The C<tmpdir> named argument specifies the path of the directory
+that should be used to store the temporary coverage files.  It
+defaults to the C<TMPDIR> environment variable, or the home
+directory as known by C<$*HOME>.
+
+Whatever was (implicitely) specified, will be returned by the
+C<tmpdir> method.
+
+=head3 :slug
+
+The C<slug> named argument specifies the prefix of the coverage
+files to be created.  It defaults to "code-coverage-".
+
+Whatever was (implicitely) specified, will be returned by the
+C<slug> method.
+
+=head3 :keep
+
+The C<keep> named argument specifies whether the temporary
+coverage files should be kept or not.  Defaults to C<False>,
+which means that any coverage files will be removed after each
+call to C<.run>.
+
+Whatever was (implicitely) specified, will be returned by the
+C<keep> method.
+
+=head2 run
+
+=begin code :lang<raku>
+
+$cc.run("foo");  # test the "foo" code path
+$cc.run("bar");  # test the "bar" code path
+
+=end code
+
+The C<run> method will execute all of the C<:runners> scripts,
+gather the coverage information, and update all internal
+information as applicable.
+
+Any positional arguments specified will be added as command
+line arguments to the C<:runners> scripts.  Note that it is
+fully ok to call this method more than once with a different
+set of parameters, to test different code paths in the runners.
+
+=head2 out
+
+=begin code :lang<raku>
+
+print $cc.out;
+
+=end code
+
+The C<out> method returns the collected STDOUT output of all
+of the C<:runners> scripts since the last time the C<run>
+method was executed.
+
+=head2 err
+
+=begin code :lang<raku>
+
+print $cc.err;
+
+=end code
+
+The C<err> method returns the collected STDERR output of all
+of the C<:runners> scripts since the last time the C<run>
+method was executed.
+
+=head2 coverables
+
+=begin code :lang<raku>
+
+for $cc.coverables.values {
+    say .source.relative;
+    say .line-numbers;
+}
+
+=end code
+
+The C<coverables> method returns a C<Map> with
+L<C<Code::Coverable>|https://raku.land/zef:lizmat/Code::Coverable>
+objects created for the C<:targets> specified, keyed by coverage
+key that will appear in coverage logs.
+
+=head2 keys
+
+=begin code :lang<raku>
+
+say "Coverage keys:";
+.say for $cc.keys;
+
+=end code
+
+The C<keys> method returns the coverage keys that were found for
+the given targets.
+
+=head2 covered
+
+=begin code :lang<raku>
+
+say "Lines covered";
+for $cc.covered {
+    say .key ~ ":\n$_.value.join(',')\n";
+}
+
+=end code
+
+The C<covered> method returns a C<Map>, keyed by coverage key,
+with all of the lines that appear to have been covered by
+executing the runner scripts (possibly multiple times).
+
+=head2 missing
+
+=begin code :lang<raku>
+
+say "Lines NOT covered";
+for $cc.missing {
+    say .key ~ ":\n$_.value.join(',')\n";
+}
+
+=end code
+
+The C<missing> method returns a C<Map>, keyed by coverage key,
+with all of the lines that appear to have B<NOT> been covered
+by executing the runners (possibly multiple times).
+
+=head2 coverage
+
+=begin code :lang<raku>
+
+say "Coverage:"
+for $cc.missing {
+    say .key ~ ": " ~ .value;
+}
+
+=end code
+
+The C<coverage> method returns a C<Map>, keyed by coverage key,
+with as value a string containing the percentage of lines that
+were covered so far by executing the runners (possibly multiple
+times).
+
+=head2 sources
+
+=begin code :lang<raku>
+
+say "Source files:"
+for $cc.sources {
+    say .key ~ ": " ~ .value.absolute;
+}
+
+=end code
+
+The C<sources> method returns a C<Map>, keyed by coverage key,
+with an C<IO::Path> object for the associated source file as
+the value.
+
+=head2 source
+
+=begin code :lang<raku>
+
+say "$key: $cc.source($key).relative";
+
+=end code
+
+The C<source> method returns an C<IO::Path> object for the
+source file associated with the given coverage key.
+
+=head2 annotated
+
+=begin code :lang<raku>
+
+print $cc.annotated($key);
+
+=end code
+
+The C<annotated> method produces the contents of the source-file
+indicated by the coverage key, with each line annotated with the
+coverage result.  The following annotations are given:
+=item C<*> - line was coverable, and covered
+=item C<x> - line was coverable and B<not> covered
+=item C< > - line was not coverable
+
+=head1 AUTHOR
+
+Elizabeth Mattijsen <liz@raku.rocks>
+
+Source can be located at: https://github.com/lizmat/Code-Coverage . Comments and
+Pull Requests are welcome.
+
+If you like this module, or what I'm doing more generally, committing to a
+L<small sponsorship|https://github.com/sponsors/lizmat/>  would mean a great
+deal to me!
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2024, 2025 Elizabeth Mattijsen
+
+This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+
+=end pod
+
+# vim: expandtab shiftwidth=4

@@ -2,7 +2,7 @@ use Test;
 
 use Code::Coverage;
 
-plan 9;
+plan 10;
 
 my $tester := $*PROGRAM.sibling("cover.raku").absolute;
 
@@ -10,7 +10,7 @@ my $cc := Code::Coverage.new(
   targets => $tester,
   runners => $tester,
 );
-is $cc.coverables{$tester},
+is $cc.coverables{$tester}.line-numbers,
   "5 7 8 9 11 12 15 16 17 18 20 21 22 23 27 29 30 32 33",
   "are the coverables ok";
 
@@ -33,5 +33,7 @@ is $cc.missed{$tester},
   "is missed ok";
 
 is $cc.coverage.head.value, "68.42%", "is the coverage ok";
+
+is $cc.source($tester).absolute, $tester, 'can we get the source';
 
 # vim: expandtab shiftwidth=4

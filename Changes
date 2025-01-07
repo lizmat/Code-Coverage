@@ -2,6 +2,14 @@ Revision history for Code::Coverage
 
 {{$NEXT}}
 
+0.0.3  2025-01-07T19:50:10+01:00
+    - Fix issues with targets being IOified when they shouldn't
+    - Fix issues in documentation of .coverage
+    - Up dependency on Code::Coverable for new interface
+    - Remove dependency on String::Utils, "root" no longer needed
+    - Add support for covering multiple targets
+    - Added methods "keys", "source", "sources" and "annotated"
+
 0.0.2  2025-01-01T21:05:20+01:00
     - Up dependency on Code::Coverable to get fixes
     - Update copyright year

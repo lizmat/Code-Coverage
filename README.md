@@ -18,13 +18,13 @@ my $coverage := Code::Coverage.new(
 
 $coverage.run;
 
-say .key ~ ": " ~ .value for $coverage.missing;
+say .key ~ ": " ~ .value for $coverage.missed;
 ```
 
 DESCRIPTION
 ===========
 
-Code::Coverage is a class that contains allows one to run one of more programs and produce code coverage of one or more targets (usually modules).
+Code::Coverage is a class that contains the logic to run one or more Raku programs and produce code coverage of one or more targets (usually modules).
 
 METHODS
 =======
@@ -50,64 +50,163 @@ The `new` method accepts the following named arguments:
 
 ### :targets
 
-The `targets` named argument indicates the paths of one or more files for which coverage information should be created.
+The `targets` named argument indicates one or more targets for which coverage information should be created. Each of these can be specified as a path (either as string, or as an `IO::Path` object), or as a `use` target (identity) such as "`String::Utils`".
+
+Whatever was specified, will be returned by the `targets` method.
 
 ### :runners
 
-The `runners` named argument indicates the paths of one or more scripts that should be executed to determine coverage information.
+The `runners` named argument indicates the paths of one or more scripts that should be executed to determine coverage information. It should specify at least one script.
+
+Whatever was specified, will be returned by the `runners` method.
 
 ### :extra
 
-The `extra` named argument indicates any extra command line arguments that should be set when calling the `runners`. By default, no extra arguments are added. A typical usage would be "-I.".
+The `extra` named argument indicates any extra command line arguments that should be set when calling the `:runners` scripts. By default, no extra arguments are added. A typical usage would be "-I." to ensure that the current source of a module is used.
+
+Whatever was specified, will be returned by the `extra` method.
 
 ### :tmpdir
 
 The `tmpdir` named argument specifies the path of the directory that should be used to store the temporary coverage files. It defaults to the `TMPDIR` environment variable, or the home directory as known by `$*HOME`.
 
+Whatever was (implicitely) specified, will be returned by the `tmpdir` method.
+
 ### :slug
 
 The `slug` named argument specifies the prefix of the coverage files to be created. It defaults to "code-coverage-".
 
+Whatever was (implicitely) specified, will be returned by the `slug` method.
+
 ### :keep
 
-The `keep` named argument specifies whether the temporary coverage files should be kept or not. Defaults to `False`.
+The `keep` named argument specifies whether the temporary coverage files should be kept or not. Defaults to `False`, which means that any coverage files will be removed after each call to `.run`.
+
+Whatever was (implicitely) specified, will be returned by the `keep` method.
 
 run
 ---
 
-The `run` method will execute all of the `:runner` scripts, gather the coverage information, and update all internal information as applicable.
+```raku
+$cc.run("foo");  # test the "foo" code path
+$cc.run("bar");  # test the "bar" code path
+```
 
-Any positional arguments specified will be added as command line arguments to the `:runner` scripts. Note that it is fully ok to call this method more than once with a different set of parameters, to test different code paths in the runners.
+The `run` method will execute all of the `:runners` scripts, gather the coverage information, and update all internal information as applicable.
+
+Any positional arguments specified will be added as command line arguments to the `:runners` scripts. Note that it is fully ok to call this method more than once with a different set of parameters, to test different code paths in the runners.
 
 out
 ---
 
-Returns the collected STDOUT output of all of the `:runner` scripts since the last time the `run` method was executed.
+```raku
+print $cc.out;
+```
+
+The `out` method returns the collected STDOUT output of all of the `:runners` scripts since the last time the `run` method was executed.
 
 err
 ---
 
-Returns the collected STDERR output of all of the `:runner` scripts since the last time the `run` method was executed.
+```raku
+print $cc.err;
+```
+
+The `err` method returns the collected STDERR output of all of the `:runners` scripts since the last time the `run` method was executed.
 
 coverables
 ----------
 
-Returns a `Map` with all of the coverable lines found in the `:targets` specified. Note the keys in the target map may actually differ from what was specified in `:targets` as `#line` directives may change file names used.
+```raku
+for $cc.coverables.values {
+    say .source.relative;
+    say .line-numbers;
+}
+```
+
+The `coverables` method returns a `Map` with [`Code::Coverable`](https://raku.land/zef:lizmat/Code::Coverable) objects created for the `:targets` specified, keyed by coverage key that will appear in coverage logs.
+
+keys
+----
+
+```raku
+say "Coverage keys:";
+.say for $cc.keys;
+```
+
+The `keys` method returns the coverage keys that were found for the given targets.
 
 covered
 -------
 
-Returns a `Map`, keyed by target key, with all of the lines that appear to have been covered by executing the runners (possibly multiple times).
+```raku
+say "Lines covered";
+for $cc.covered {
+    say .key ~ ":\n$_.value.join(',')\n";
+}
+```
+
+The `covered` method returns a `Map`, keyed by coverage key, with all of the lines that appear to have been covered by executing the runner scripts (possibly multiple times).
 
 missing
 -------
 
-Returns a `Map`, keyed by target key, with all of the lines that appear to have **NOT** been covered by executing the runners (possibly multiple times).
+```raku
+say "Lines NOT covered";
+for $cc.missing {
+    say .key ~ ":\n$_.value.join(',')\n";
+}
+```
+
+The `missing` method returns a `Map`, keyed by coverage key, with all of the lines that appear to have **NOT** been covered by executing the runners (possibly multiple times).
 
 coverage
 --------
 
-Returns a string with the percentage of lines that were covered so far by executing the runners (possibly multiple times).
+```raku
+say "Coverage:"
+for $cc.missing {
+    say .key ~ ": " ~ .value;
+}
+```
+
+The `coverage` method returns a `Map`, keyed by coverage key, with as value a string containing the percentage of lines that were covered so far by executing the runners (possibly multiple times).
+
+sources
+-------
+
+```raku
+say "Source files:"
+for $cc.sources {
+    say .key ~ ": " ~ .value.absolute;
+}
+```
+
+The `sources` method returns a `Map`, keyed by coverage key, with an `IO::Path` object for the associated source file as the value.
+
+source
+------
+
+```raku
+say "$key: $cc.source($key).relative";
+```
+
+The `source` method returns an `IO::Path` object for the source file associated with the given coverage key.
+
+annotated
+---------
+
+```raku
+print $cc.annotated($key);
+```
+
+The `annotated` method produces the contents of the source-file indicated by the coverage key, with each line annotated with the coverage result. The following annotations are given:
+
+  * `*` - line was coverable, and covered
+
+  * `x` - line was coverable and **not** covered
+
+  * `` - line was not coverable
 
 AUTHOR
 ======
