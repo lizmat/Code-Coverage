@@ -37,6 +37,7 @@ my $cc := Code::Coverage.new(
   targets => @modules,
   runners => @test-scripts,
   extra   => "-I.",    # default: none
+  repo    => $repo,    # default: $*REPO
   tmpdir  => ".",      # default: %*ENV<TMPDIR> // $*HOME
   slug    => "foobar", # default: "code-coverage-"
   keep    => True,     # default: False
@@ -75,6 +76,15 @@ would be "-I." to ensure that the current source of a module
 is used.
 
 Whatever was specified, will be returned by the C<extra> method.
+
+=head3 :repo
+
+The C<repo> named argument indicates the C<CompUnit::Repository>
+object to be used when coverable lines are being deduced from
+bytecode.  It defaults to C<$*REPO>, aka the default repository
+chain.
+
+Whatever was specified, will be returned by the C<repo> method.
 
 =head3 :tmpdir
 

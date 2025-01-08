@@ -2,6 +2,12 @@ Revision history for Code::Coverage
 
 {{$NEXT}}
 
+0.0.4  2025-01-08T17:06:11+01:00
+    - Bump dependency on Code::Coverable to make sure this module
+      is installable on the newest version
+    - Add :repo named argument to .new, to be able to explicitely
+      specify which repo-chain to be used
+
 0.0.3  2025-01-07T19:50:10+01:00
     - Fix issues with targets being IOified when they shouldn't
     - Fix issues in documentation of .coverage

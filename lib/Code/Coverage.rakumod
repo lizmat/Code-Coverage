@@ -1,11 +1,12 @@
 use v6.*;  # because of nano
 
-use Code::Coverable:ver<0.0.6+>:auth<zef:lizmat>;
+use Code::Coverable:ver<0.0.8+>:auth<zef:lizmat>;
 
 class Code::Coverage {
     has @.targets;
     has @.runners;
     has @.extra;
+    has $.repo   = $*REPO;
     has $.tmpdir = %*ENV<TMPDIR> // $*HOME;
     has $.slug   = "code-coverage-";
     has $.keep;
@@ -17,7 +18,7 @@ class Code::Coverage {
     method TWEAK() {
         @!runners    := @!runners.map(*.IO.absolute).List;
         $!tmpdir     := $!tmpdir.IO;
-        %!coverables = coverables(@!targets).map: { .key => $_ }
+        %!coverables = coverables(@!targets, :$!repo).map: { .key => $_ }
     }
 
     method run(Code::Coverage:D: *@args) {

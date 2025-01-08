@@ -37,6 +37,7 @@ my $cc := Code::Coverage.new(
   targets => @modules,
   runners => @test-scripts,
   extra   => "-I.",    # default: none
+  repo    => $repo,    # default: $*REPO
   tmpdir  => ".",      # default: %*ENV<TMPDIR> // $*HOME
   slug    => "foobar", # default: "code-coverage-"
   keep    => True,     # default: False
@@ -65,6 +66,12 @@ Whatever was specified, will be returned by the `runners` method.
 The `extra` named argument indicates any extra command line arguments that should be set when calling the `:runners` scripts. By default, no extra arguments are added. A typical usage would be "-I." to ensure that the current source of a module is used.
 
 Whatever was specified, will be returned by the `extra` method.
+
+### :repo
+
+The `repo` named argument indicates the `CompUnit::Repository` object to be used when coverable lines are being deduced from bytecode. It defaults to `$*REPO`, aka the default repository chain.
+
+Whatever was specified, will be returned by the `repo` method.
 
 ### :tmpdir
 
