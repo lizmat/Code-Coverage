@@ -294,6 +294,18 @@ say $cc.num-covered-lines;
 The C<num-covered-lines> method returns the total number of
 lines that are marked covered in all coverage keys.
 
+=head2 num-missed-lines
+
+=begin code :lang<raku>
+
+say $cc.num-missed-lines;
+
+=end code
+
+The C<num-missed-lines> method returns the total number of
+lines that are marked coverable, but have not been covered
+in all coverage keys (yet).
+
 =head2 max-lines
 
 =begin code :lang<raku>

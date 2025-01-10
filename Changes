@@ -1,8 +1,9 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
-    - Add methods "num-coverable-lines", "num-covered-lines" and
-      "max-lines"
+    - Bump dependeny on Code::Coverable to keep in sync
+    - Add methods "num-coverable-lines", "num-covered-lines",
+      "num-missed-lines", and "max-lines"
     - Mark covered lines that were not coverable differently in
       the annotation
 

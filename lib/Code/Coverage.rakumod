@@ -1,6 +1,6 @@
 use v6.*;  # because of nano
 
-use Code::Coverable:ver<0.0.8+>:auth<zef:lizmat>;
+use Code::Coverable:ver<0.0.9+>:auth<zef:lizmat>;
 
 class Code::Coverage {
     has @.targets;
@@ -95,6 +95,14 @@ class Code::Coverage {
 
     method num-covered-lines(Code::Coverage:D:) {
         %!covered.values.map(*.elems).sum
+    }
+
+    method num-missed-lines(Code::Coverage:D:) {
+        %!coverables.map( -> $coverable {
+            with %!covered{$coverable.key} {
+                ($coverable.value.line-numbers (-) $_).elems
+            }
+        }).sum
     }
 
     method max-lines(Code::Coverage:D:) {

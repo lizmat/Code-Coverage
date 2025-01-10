@@ -6,7 +6,7 @@
   "build-depends": [
   ],
   "depends": [
-    "Code::Coverable:ver<0.0.8+>:auth<zef:lizmat>"
+    "Code::Coverable:ver<0.0.9+>:auth<zef:lizmat>"
   ],
   "description": "produce code coverage reports",
   "license": "Artistic-2.0",
