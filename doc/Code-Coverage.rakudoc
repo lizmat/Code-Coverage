@@ -267,7 +267,8 @@ print $cc.annotated($key);
 The C<annotated> method produces the contents of the source-file
 indicated by the coverage key, with each line annotated with the
 coverage result.  The following annotations are given:
-=item C<*> - line was coverable, and covered
+=item C<✱> - line was coverable, and covered
+=item C<*> - line was B<not> coverable, but covered anyway
 =item C<x> - line was coverable and B<not> covered
 =item C< > - line was not coverable
 

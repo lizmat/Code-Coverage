@@ -101,7 +101,9 @@ class Code::Coverage {
             my int $i;  # effectively start at 1
             for $coverable.source.lines(:!chomp) {
                 @parts.push: @covered[++$i]
-                  ?? "* "
+                  ?? @line-numbers[$i]
+                    ?? "✱ "
+                    !! "* "
                   !! @line-numbers[$i]
                     ?? "x "
                     !! "  ";
