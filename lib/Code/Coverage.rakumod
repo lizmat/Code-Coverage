@@ -10,15 +10,19 @@ class Code::Coverage {
     has $.tmpdir = %*ENV<TMPDIR> // $*HOME;
     has $.slug   = "code-coverage-";
     has $.keep;
-    has %.coverables is built(False) handles <keys>;
-    has %.covered    is built(False);
+    has %.coverables          is built(False) handles <keys>;
+    has $.num-coverable-lines is built(False);
+    has %.covered             is built(False);
     has str @!out;
     has str @!err;
 
     method TWEAK() {
         @!runners    := @!runners.map(*.IO.absolute).List;
         $!tmpdir     := $!tmpdir.IO;
-        %!coverables = coverables(@!targets, :$!repo).map: { .key => $_ }
+
+        my @coverables = coverables(@!targets, :$!repo);
+        $!num-coverable-lines := @coverables.map(*.line-numbers.elems).sum;
+        %!coverables = @coverables.map: { .key => $_ }
     }
 
     method run(Code::Coverage:D: *@args) {
@@ -89,6 +93,14 @@ class Code::Coverage {
         (%!coverables{$key} andthen .source) // Nil
     }
 
+    method num-covered-lines(Code::Coverage:D:) {
+        %!covered.values.map(*.elems).sum
+    }
+
+    method max-lines(Code::Coverage:D:) {
+        $!num-coverable-lines max self.num-covered-lines
+    }
+
     method annotated(Code::Coverage:D: Str:D $key) {
         with %!coverables{$key} -> $coverable {
             my uint8 @line-numbers;;
@@ -102,8 +114,8 @@ class Code::Coverage {
             for $coverable.source.lines(:!chomp) {
                 @parts.push: @covered[++$i]
                   ?? @line-numbers[$i]
-                    ?? "✱ "
-                    !! "* "
+                    ?? "* "
+                    !! "✱ "
                   !! @line-numbers[$i]
                     ?? "x "
                     !! "  ";

@@ -2,7 +2,7 @@ use Test;
 
 use Code::Coverage;
 
-plan 10;
+plan 13;
 
 my $tester := $*PROGRAM.sibling("cover.raku").absolute;
 
@@ -35,5 +35,9 @@ is $cc.missed{$tester},
 is $cc.coverage.head.value, "68.42%", "is the coverage ok";
 
 is $cc.source($tester).absolute, $tester, 'can we get the source';
+
+is $cc.num-coverable-lines, 19, 'num-coverable-lines ok';
+is $cc.num-covered-lines,   14, 'num-covered-lines ok';
+is $cc.max-lines,           19, 'max-lines ok';
 
 # vim: expandtab shiftwidth=4

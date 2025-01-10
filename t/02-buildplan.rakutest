@@ -33,10 +33,11 @@ class Code::Coverage BUILDPLAN:
 12 vivify nqp::getattr(obj,Code::Coverage,'@!extra') if part of a mixin
 13 vivify nqp::getattr(obj,Code::Coverage,'$!keep') if part of a mixin
 14 vivify nqp::getattr(obj,Code::Coverage,'%!coverables') if part of a mixin
-15 vivify nqp::getattr(obj,Code::Coverage,'%!covered') if part of a mixin
-16 vivify nqp::getattr(obj,Code::Coverage,'@!out') if part of a mixin
-17 vivify nqp::getattr(obj,Code::Coverage,'@!err') if part of a mixin
-18 call obj.Code::Coverage::TWEAK
+15 vivify nqp::getattr(obj,Code::Coverage,'$!num-coverable-lines') if part of a mixin
+16 vivify nqp::getattr(obj,Code::Coverage,'%!covered') if part of a mixin
+17 vivify nqp::getattr(obj,Code::Coverage,'@!out') if part of a mixin
+18 vivify nqp::getattr(obj,Code::Coverage,'@!err') if part of a mixin
+19 call obj.Code::Coverage::TWEAK
 OUT
 is $cc.err, "", "err on first run ok";
 is $cc.covered.values.head,

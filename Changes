@@ -1,6 +1,10 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
+    - Add methods "num-coverable-lines", "num-covered-lines" and
+      "max-lines"
+    - Mark covered lines that were not coverable differently in
+      the annotation
 
 0.0.4  2025-01-08T17:06:11+01:00
     - Bump dependency on Code::Coverable to make sure this module

@@ -209,13 +209,40 @@ print $cc.annotated($key);
 
 The `annotated` method produces the contents of the source-file indicated by the coverage key, with each line annotated with the coverage result. The following annotations are given:
 
-  * `✱` - line was coverable, and covered
+  * `*` - line was coverable, and covered
 
-  * `*` - line was **not** coverable, but covered anyway
+  * `✱` - line was **not** coverable, but covered anyway
 
   * `x` - line was coverable and **not** covered
 
   * `` - line was not coverable
+
+num-coverable-lines
+-------------------
+
+```raku
+say $cc.num-coverable-lines;
+```
+
+The `num-coverable-lines` method returns the total number of lines that are marked coverable in all coverage keys.
+
+num-covered-lines
+-----------------
+
+```raku
+say $cc.num-covered-lines;
+```
+
+The `num-covered-lines` method returns the total number of lines that are marked covered in all coverage keys.
+
+max-lines
+---------
+
+```raku
+say $cc.max-lines; # max number of lines that can be covered
+```
+
+The `max-lines` method returns the maximum number of lines that can be covered. In some edge cases, this may actually be greater than the number of lines that are marked coverable because some lines may appear in the coverage log that were **not** marked as coverable.
 
 AUTHOR
 ======

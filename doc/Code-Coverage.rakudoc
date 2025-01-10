@@ -267,10 +267,46 @@ print $cc.annotated($key);
 The C<annotated> method produces the contents of the source-file
 indicated by the coverage key, with each line annotated with the
 coverage result.  The following annotations are given:
-=item C<✱> - line was coverable, and covered
-=item C<*> - line was B<not> coverable, but covered anyway
+=item C<*> - line was coverable, and covered
+=item C<✱> - line was B<not> coverable, but covered anyway
 =item C<x> - line was coverable and B<not> covered
 =item C< > - line was not coverable
+
+=head2 num-coverable-lines
+
+=begin code :lang<raku>
+
+say $cc.num-coverable-lines;
+
+=end code
+
+The C<num-coverable-lines> method returns the total number of
+lines that are marked coverable in all coverage keys.
+
+=head2 num-covered-lines
+
+=begin code :lang<raku>
+
+say $cc.num-covered-lines;
+
+=end code
+
+The C<num-covered-lines> method returns the total number of
+lines that are marked covered in all coverage keys.
+
+=head2 max-lines
+
+=begin code :lang<raku>
+
+say $cc.max-lines; # max number of lines that can be covered
+
+=end code
+
+The C<max-lines> method returns the maximum number of lines
+that can be covered.  In some edge cases, this may actually
+be greater than the number of lines that are marked coverable
+because some lines may appear in the coverage log that were
+B<not> marked as coverable.
 
 =head1 AUTHOR
 
