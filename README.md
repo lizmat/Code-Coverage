@@ -235,6 +235,15 @@ say $cc.num-covered-lines;
 
 The `num-covered-lines` method returns the total number of lines that are marked covered in all coverage keys.
 
+num-missed-lines
+----------------
+
+```raku
+say $cc.num-missed-lines;
+```
+
+The `num-missed-lines` method returns the total number of lines that are marked coverable, but have not been covered in all coverage keys (yet).
+
 max-lines
 ---------
 
