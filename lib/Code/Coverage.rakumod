@@ -1,6 +1,6 @@
 use v6.*;  # because of nano
 
-use Code::Coverable:ver<0.0.9+>:auth<zef:lizmat>;
+use Code::Coverable:ver<0.0.10+>:auth<zef:lizmat>;
 
 class Code::Coverage {
     has @.targets;

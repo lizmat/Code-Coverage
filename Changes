@@ -1,6 +1,7 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
+    - Bump dependeny on Code::Coverable to keep in sync
 
 0.0.5  2025-01-10T15:06:16+01:00
     - Bump dependeny on Code::Coverable to keep in sync
