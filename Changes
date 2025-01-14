@@ -1,6 +1,8 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
+
+0.0.7  2025-01-14T21:45:30+01:00
     - Move BUILDPLAN tests to xt for now, they appear to cause
       trouble on bare installs
     - Bump dependency on Code::Coverable to keep in sync
