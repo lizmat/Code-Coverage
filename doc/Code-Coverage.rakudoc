@@ -219,7 +219,7 @@ by executing the runners (possibly multiple times).
 =begin code :lang<raku>
 
 say "Coverage:"
-for $cc.missing {
+for $cc.coverage {
     say .key ~ ": " ~ .value;
 }
 

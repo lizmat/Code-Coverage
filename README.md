@@ -172,7 +172,7 @@ coverage
 
 ```raku
 say "Coverage:"
-for $cc.missing {
+for $cc.coverage {
     say .key ~ ": " ~ .value;
 }
 ```
