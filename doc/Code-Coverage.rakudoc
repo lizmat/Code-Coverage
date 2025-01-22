@@ -199,18 +199,18 @@ The C<covered> method returns a C<Map>, keyed by coverage key,
 with all of the lines that appear to have been covered by
 executing the runner scripts (possibly multiple times).
 
-=head2 missing
+=head2 missed
 
 =begin code :lang<raku>
 
 say "Lines NOT covered";
-for $cc.missing {
+for $cc.missed {
     say .key ~ ":\n$_.value.join(',')\n";
 }
 
 =end code
 
-The C<missing> method returns a C<Map>, keyed by coverage key,
+The C<missed> method returns a C<Map>, keyed by coverage key,
 with all of the lines that appear to have B<NOT> been covered
 by executing the runners (possibly multiple times).
 

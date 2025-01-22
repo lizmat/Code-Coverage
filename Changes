@@ -2,6 +2,10 @@ Revision history for Code::Coverage
 
 {{$NEXT}}
 
+0.0.8  2025-01-22T17:47:04+01:00
+    - Fix documentation error: the method is called "missed"
+      instead of "missing"
+
 0.0.7  2025-01-14T21:45:30+01:00
     - Move BUILDPLAN tests to xt for now, they appear to cause
       trouble on bare installs

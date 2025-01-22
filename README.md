@@ -155,17 +155,17 @@ for $cc.covered {
 
 The `covered` method returns a `Map`, keyed by coverage key, with all of the lines that appear to have been covered by executing the runner scripts (possibly multiple times).
 
-missing
--------
+missed
+------
 
 ```raku
 say "Lines NOT covered";
-for $cc.missing {
+for $cc.missed {
     say .key ~ ":\n$_.value.join(',')\n";
 }
 ```
 
-The `missing` method returns a `Map`, keyed by coverage key, with all of the lines that appear to have **NOT** been covered by executing the runners (possibly multiple times).
+The `missed` method returns a `Map`, keyed by coverage key, with all of the lines that appear to have **NOT** been covered by executing the runners (possibly multiple times).
 
 coverage
 --------
