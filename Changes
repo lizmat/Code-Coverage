@@ -1,6 +1,9 @@
 Revision history for Code::Coverage
 
 {{$NEXT}}
+    - Up dependencies
+    - Modernize meta and documentation
+    - Update copyright year
 
 0.0.8  2025-01-22T17:47:04+01:00
     - Fix documentation error: the method is called "missed"

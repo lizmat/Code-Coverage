@@ -5,19 +5,28 @@
   ],
   "build-depends": [
   ],
-  "depends": [
-    "Code::Coverable:ver<0.0.12+>:auth<zef:lizmat>"
-  ],
+  "depends": {
+    "runtime": {
+      "requires": [
+        "Code::Coverable:ver<0.0.14+>:auth<zef:lizmat>"
+      ]
+    }
+  },
   "description": "produce code coverage reports",
   "license": "Artistic-2.0",
   "name": "Code::Coverage",
-  "perl": "6.d",
   "provides": {
     "Code::Coverage": "lib/Code/Coverage.rakumod"
   },
+  "raku": "6.d",
   "resources": [
   ],
-  "source-url": "https://github.com/lizmat/Code-Coverage.git",
+  "source-url": "https://codeberg.org/lizmat/Code-Coverage.git",
+  "support": {
+    "bugtracker": "https://codeberg.org/lizmat/Code-Coverage/issues",
+    "email": "liz@raku.rocks",
+    "source": "https://codeberg.org/lizmat/Code-Coverage.git"
+  },
   "tags": [
     "COVERAGE"
   ],
